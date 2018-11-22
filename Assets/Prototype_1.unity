@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 822905047}
   - component: {fileID: 822905046}
   - component: {fileID: 822905045}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Prototyping Art_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
