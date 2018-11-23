@@ -21,7 +21,13 @@ public class Player_Score : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D trig) {
-		CountScore ();
+		if (trig.gameObject.name == "End_Level") {
+			CountScore ();
+		}
+		if (trig.gameObject.name == "Coin") {
+			playerScore += 10;
+			Destroy (trig.gameObject);
+		}
 	}
 
 	void CountScore () {
