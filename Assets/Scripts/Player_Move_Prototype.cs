@@ -56,6 +56,11 @@ public class Player_Move_Prototype : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast (transform.position, Vector2.down);
 		if (hit != null && hit.collider != null && hit.distance < 0.9f && hit.collider.tag == "enemy") {
 			GetComponent<Rigidbody2D>().AddForce(Vector2.up * 1000);
+			hit.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 200);
+			hit.collider.gameObject.GetComponent<Rigidbody2D>().gravityScale = 8;
+			hit.collider.gameObject.GetComponent<Rigidbody2D>().freezeRotation = false;
+			hit.collider.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+			hit.collider.gameObject.GetComponent<Enemy_Move>().enabled = false;
 		}
 		if (hit != null && hit.collider != null && hit.distance < 0.9f && hit.collider.tag != "enemy") {
 			isGrounded = true;
