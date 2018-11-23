@@ -18,6 +18,7 @@ public class Player_Score : MonoBehaviour {
 		if (timeLeft < 0.1f) {
 			SceneManager.LoadScene("Prototype_1");
 		}
+		PlayerRaycast ();
 	}
 
 	void OnTriggerEnter2D (Collider2D trig) {
@@ -33,5 +34,13 @@ public class Player_Score : MonoBehaviour {
 	void CountScore () {
 		playerScore = playerScore + (int)(timeLeft * 10);
 		Debug.Log(playerScore);
+	}
+
+	void PlayerRaycast () {
+		RaycastHit2D hit = Physics2D.Raycast (transform.position, Vector2.down);
+		if (hit.distance < 0.9f && hit.collider.tag == "enemy") {
+			GetComponent<Rigidbody2D>().AddForce(Vector2.up * 1000);
+		}
+
 	}
 }
