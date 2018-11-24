@@ -23,6 +23,7 @@ public class Player_Score : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D trig) {
 		if (trig.gameObject.name == "End_Level") {
 			CountScore ();
+			DataManagement.datamanagement.SaveData ();
 		}
 		if (trig.gameObject.name == "Coin") {
 			playerScore += 10;
@@ -32,6 +33,7 @@ public class Player_Score : MonoBehaviour {
 
 	void CountScore () {
 		playerScore = playerScore + (int)(timeLeft * 10);
-		Debug.Log(playerScore);
+		DataManagement.datamanagement.highScore = playerScore + (int)(timeLeft * 10);
+		DataManagement.datamanagement.SaveData ();
 	}
 }
