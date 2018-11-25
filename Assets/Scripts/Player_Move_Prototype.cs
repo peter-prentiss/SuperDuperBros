@@ -5,10 +5,10 @@ using UnityEngine;
 public class Player_Move_Prototype : MonoBehaviour {
 
 	public int playerSpeed = 10;
-	private bool facingRight = true;
 	public int playerJumpPower = 1250;
 	private float moveX;
 	public bool isGrounded;
+	public float distanceToBottomOfPlayer = 0.9f;
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,12 +23,17 @@ public class Player_Move_Prototype : MonoBehaviour {
 			Jump();
 		}
 		//ANIMATION
-		//PLAYER DIRECTION
-		if (moveX > 0.0f && facingRight == false) {
-			FlipPlayer();
+		if (moveX != 0) {
+			GetComponent<Animator>().SetBool("IsRunning", true);
+		} else {
+			GetComponent<Animator>().SetBool("IsRunning", false);
 		}
-		else if (moveX < 0.0f && facingRight == true) {
-			FlipPlayer ();
+		//PLAYER DIRECTION
+		if (moveX > 0.0f) {
+			GetComponent<SpriteRenderer>().flipX = false;
+		}
+		else if (moveX < 0.0f) {
+			GetComponent<SpriteRenderer>().flipX = true;
 		}
 		//PHYSICS
 		gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveX * playerSpeed, gameObject.GetComponent<Rigidbody2D>().velocity.y);
@@ -40,13 +45,7 @@ public class Player_Move_Prototype : MonoBehaviour {
 		isGrounded = false;
 	}
 	
-	void FlipPlayer () {
-		facingRight = !facingRight;
-		Vector2 localScale = gameObject.transform.localScale;
-		localScale.x *= -1;
-		transform.localScale = localScale;
-		
-	}
+	
 
 	void OnCollisionEnter2D (Collision2D col) {
 		
@@ -54,11 +53,11 @@ public class Player_Move_Prototype : MonoBehaviour {
 
 	void PlayerRaycast () {
 		RaycastHit2D rayUp = Physics2D.Raycast (transform.position, Vector2.up);
-		if (rayUp != null && rayUp.collider != null && rayUp.distance < 0.9f && rayUp.collider.name == "QuestionBox") {
+		if (rayUp != null && rayUp.collider != null && rayUp.distance < distanceToBottomOfPlayer && rayUp.collider.name == "QuestionBox") {
 			Destroy (rayUp.collider.gameObject);
 		}
 		RaycastHit2D rayDown = Physics2D.Raycast (transform.position, Vector2.down);
-		if (rayDown != null && rayDown.collider != null && rayDown.distance < 0.9f && rayDown.collider.tag == "enemy") {
+		if (rayDown != null && rayDown.collider != null && rayDown.distance < distanceToBottomOfPlayer && rayDown.collider.tag == "enemy") {
 			GetComponent<Rigidbody2D>().AddForce(Vector2.up * 1000);
 			rayDown.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 200);
 			rayDown.collider.gameObject.GetComponent<Rigidbody2D>().gravityScale = 8;
@@ -66,7 +65,7 @@ public class Player_Move_Prototype : MonoBehaviour {
 			rayDown.collider.gameObject.GetComponent<BoxCollider2D>().enabled = false;
 			rayDown.collider.gameObject.GetComponent<Enemy_Move>().enabled = false;
 		}
-		if (rayDown != null && rayDown.collider != null && rayDown.distance < 0.9f && rayDown.collider.tag != "enemy") {
+		if (rayDown != null && rayDown.collider != null && rayDown.distance < distanceToBottomOfPlayer && rayDown.collider.tag != "enemy") {
 			isGrounded = true;
 		}
 	}
